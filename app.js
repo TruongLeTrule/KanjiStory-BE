@@ -3,8 +3,10 @@ const app = express();
 const singleKanji = require("./routes/singleKanji");
 const connectDB = require("./db/connect");
 require("dotenv").config();
+const allowAccess = require("./middlewares/allowAccess");
 
 // middleware
+app.use(allowAccess);
 app.use(express.json());
 
 // routes
