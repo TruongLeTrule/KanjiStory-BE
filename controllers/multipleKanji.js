@@ -9,7 +9,9 @@ const createLongStory = async (req, res) => {
     const cleanKanji = [...new Set(kanji)];
 
     const story = await generateStoFroMultiKanji({ kanji: cleanKanji, type });
-    res.status(201).json({ story, kanji: cleanKanji, storyType: type });
+    res
+      .status(201)
+      .json({ story, kanji: cleanKanji, storyType: type, date: new Date() });
   } catch (error) {
     res.status(500).json({ msg: error });
   }

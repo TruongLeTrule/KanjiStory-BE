@@ -10,6 +10,14 @@ const getAllSingleKanji = async (req, res) => {
   }
 };
 
+const deleteKanji = async (req, res) => {
+  try {
+    res.status(200).json("Delete kanji");
+  } catch (error) {
+    res.status(500).json({ msg: error });
+  }
+};
+
 const getAllLongKanjiStory = async (req, res) => {
   try {
     const multipleKanjiStory = await MultipleKanjiStory.find({});
@@ -19,4 +27,4 @@ const getAllLongKanjiStory = async (req, res) => {
   }
 };
 
-module.exports = { getAllSingleKanji, getAllLongKanjiStory };
+module.exports = { getAllSingleKanji, getAllLongKanjiStory, deleteKanji };

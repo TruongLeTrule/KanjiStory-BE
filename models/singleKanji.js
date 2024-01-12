@@ -5,6 +5,7 @@ const SingleKanjiSchema = new mongoose.Schema({
   kanji: Object,
   story: String,
   storyType: String,
+  date: Date,
 });
 
 module.exports = mongoose.model("SingleKanji", SingleKanjiSchema);

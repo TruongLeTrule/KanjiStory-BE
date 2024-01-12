@@ -23,7 +23,7 @@ const getKanjiInfo = async (kanji, type) => {
       kanji: kanji.meaning.english,
       type,
     });
-    return { radical, kanji, story, storyType: type };
+    return { radical, kanji, story, storyType: type, date: new Date() };
   } catch (error) {
     console.error(error);
   }
@@ -43,8 +43,6 @@ const createKanjiStory = async (req, res) => {
 
     // Deprecate duplicated elements
     kanjiArr = [...new Set(kanjiArr)];
-
-    console.log(kanjiArr);
 
     // Get story within character
     const kanjiInfo = await Promise.all(
