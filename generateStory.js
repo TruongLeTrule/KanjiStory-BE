@@ -40,11 +40,6 @@ const generateStoFroMultiKanji = async ({ kanji, type }) => {
   ];
   const result = await client.getChatCompletions(deploymentId, message);
   const story = result.choices.map((choice) => choice.message.content);
-  console.log(
-    `Generate a ${type} japanese story fewer 100 words and contain ${kanji.join(
-      ", "
-    )} word`
-  );
   return story;
 };
 

@@ -42,12 +42,17 @@ const createKanjiStory = async (req, res) => {
   try {
     const storyType = req.params.storyType;
     const queryKanji = req.params.kanji;
-    const kanjiArr = [];
+    let kanjiArr = [];
 
     // Split each kanji in the query to character
     for (var i = 0; i < queryKanji.length; i++) {
       kanjiArr.push(queryKanji[i]);
     }
+
+    // Deprecate duplicated elements
+    kanjiArr = [...new Set(kanjiArr)];
+
+    console.log(kanjiArr);
 
     // Get story within character
     const kanjiInfo = await Promise.all(
