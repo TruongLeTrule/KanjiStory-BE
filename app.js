@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const singleKanji = require("./routes/singleKanji");
+const multipleKanji = require("./routes/multipleKanji");
 const connectDB = require("./db/connect");
 require("dotenv").config();
 const allowAccess = require("./middlewares/allowAccess");
@@ -11,6 +12,7 @@ app.use(express.json());
 
 // routes
 app.use("/api/v1/singleKanji", singleKanji);
+app.use("/api/v1/multipleKanji", multipleKanji);
 
 const port = 3000;
 
