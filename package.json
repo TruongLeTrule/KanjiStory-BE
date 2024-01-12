@@ -1,0 +1,30 @@
+{
+  "name": "kanjistory-be",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TruongLeTrule/KanjiStory-BE.git"
+  },
+  "author": "Roaring_Leopards",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TruongLeTrule/KanjiStory-BE/issues"
+  },
+  "homepage": "https://github.com/TruongLeTrule/KanjiStory-BE#readme",
+  "dependencies": {
+    "@azure/openai": "^1.0.0-beta.10",
+    "axios": "^1.6.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^8.0.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
