@@ -2,6 +2,7 @@ const axios = require("axios");
 const SingleKanji = require("../models/singleKanji");
 const { generateKanjiStory } = require("../generateStory");
 
+// Get kanji specific information
 const getKanjiInfo = async (kanji, type) => {
   const options = {
     method: "GET",
@@ -36,6 +37,7 @@ const getKanjiInfo = async (kanji, type) => {
   }
 };
 
+// Get the kanji information and story about kanji
 const createKanjiStory = async (req, res) => {
   try {
     const storyType = req.params.storyType;
@@ -56,12 +58,42 @@ const createKanjiStory = async (req, res) => {
     );
     res.status(200).json({ kanjiInfo });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ msg: error });
+  }
+};
+
+// Regenerate the story
+const regenerateStory = async (req, res) => {
+  try {
+    const { storyType, radical, kanji } = req.body;
+
+    // Split meaning in to array
+    const radicalMean = radical.meaning.english
+      .split(",")
+      .map((word) => `'${word.trim()}'`);
+    const kanjiMean = kanji.meaning.english
+      .split(",")
+      .map((word) => `'${word.trim()}'`);
+
+    // Generate story from kanji, radical and type of story
+    const story = await generateKanjiStory({
+      radical: radicalMean,
+      kanji: kanjiMean,
+      type: storyType,
+    });
+    res.status(200).json({ story });
+  } catch (error) {
+    res.status(500).json({ msg: error });
   }
 };
 
 const saveKanjiStory = (req, res) => {
-  res.json(req.body);
+  try {
+    const singleKanji = SingleKanji.create(req.body);
+    res.status(201).json({ singleKanji });
+  } catch (error) {
+    res.status(500).json({ msg: error });
+  }
 };
 
-module.exports = { createKanjiStory, saveKanjiStory };
+module.exports = { createKanjiStory, saveKanjiStory, regenerateStory };
