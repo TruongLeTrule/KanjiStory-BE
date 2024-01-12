@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
 const SingleKanjiSchema = new mongoose.Schema({
-  kanjiInfo: Object,
+  radical: Object,
+  kanji: Object,
   story: String,
   storyType: String,
 });

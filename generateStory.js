@@ -10,17 +10,23 @@ const generateKanjiStory = async ({ radical, kanji, type }) => {
     new AzureKeyCredential(azureApiKey)
   );
   const deploymentId = "GPT35TURBO";
+
+  // Split meaning in to array and add ""
+  const formattedRad = radical.split(",").map((word) => `'${word.trim()}'`);
+  const formattedKan = kanji.split(",").map((word) => `'${word.trim()}'`);
+
   const message = [
     {
       role: "user",
-      content: `Generate a ${type} story fewer 20 words and contain ${radical.join(
+      content: `Generate a ${type} story fewer 20 words and contain ${formattedRad.join(
         ", "
-      )} word and ${kanji.join(", ")} word`,
+      )} word and ${formattedKan.join(", ")} word`,
     },
   ];
+
   const result = await client.getChatCompletions(deploymentId, message);
   const story = result.choices.map((choice) => choice.message.content);
-  return story;
+  return story[0];
 };
 
 // Generate a long story from multiple kanji
@@ -30,17 +36,21 @@ const generateStoFroMultiKanji = async ({ kanji, type }) => {
     new AzureKeyCredential(azureApiKey)
   );
   const deploymentId = "GPT35TURBO";
+
+  // Add "" outside each element
+  const formattedArr = kanji.map((kanji) => `"${kanji.trim()}"`);
+
   const message = [
     {
       role: "user",
-      content: `Generate a ${type} japanese story fewer 100 words and contain ${kanji.join(
+      content: `Generate a ${type} japanese story fewer 100 words and contain ${formattedArr.join(
         ", "
       )} word`,
     },
   ];
   const result = await client.getChatCompletions(deploymentId, message);
   const story = result.choices.map((choice) => choice.message.content);
-  return story;
+  return story[0];
 };
 
 module.exports = { generateKanjiStory, generateStoFroMultiKanji };

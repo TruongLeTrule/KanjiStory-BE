@@ -6,9 +6,10 @@ const createLongStory = async (req, res) => {
     const { kanji, type } = req.body;
 
     // Deprecate the duplicated elements
-    const cleanKanji = [...new Set(kanji)].map((kanji) => `"${kanji}"`);
+    const cleanKanji = [...new Set(kanji)];
+
     const story = await generateStoFroMultiKanji({ kanji: cleanKanji, type });
-    res.status(201).json({ story });
+    res.status(201).json({ story, kanji: cleanKanji, storyType: type });
   } catch (error) {
     res.status(500).json({ msg: error });
   }

@@ -17,21 +17,13 @@ const getKanjiInfo = async (kanji, type) => {
     const response = await axios.request(options);
     const { radical, kanji } = response.data;
 
-    // Split meaning in to array
-    const radicalMean = radical.meaning.english
-      .split(",")
-      .map((word) => `'${word.trim()}'`);
-    const kanjiMean = kanji.meaning.english
-      .split(",")
-      .map((word) => `'${word.trim()}'`);
-
-    // Generate story from kanji, radical and type of story
+    // Generate story from kanji and radical meaning and type of story
     const story = await generateKanjiStory({
-      radical: radicalMean,
-      kanji: kanjiMean,
+      radical: radical.meaning.english,
+      kanji: kanji.meaning.english,
       type,
     });
-    return { radical, kanji, story };
+    return { radical, kanji, story, storyType: type };
   } catch (error) {
     console.error(error);
   }
