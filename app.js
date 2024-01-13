@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const basic = require("./routes/basic");
 const singleKanji = require("./routes/singleKanji");
 const multipleKanji = require("./routes/multipleKanji");
 const store = require("./routes/store");
@@ -17,6 +18,7 @@ app.use("/api/v1/singleKanji", singleKanji);
 app.use("/api/v1/multipleKanji", multipleKanji);
 app.use("/api/v1/store", store);
 app.use("/api/v1/user", auth);
+app.use("/api/v1/basic", basic);
 
 const port = 3000;
 
