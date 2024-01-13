@@ -3,6 +3,7 @@ const app = express();
 const singleKanji = require("./routes/singleKanji");
 const multipleKanji = require("./routes/multipleKanji");
 const store = require("./routes/store");
+const auth = require("./routes/auth");
 const connectDB = require("./db/connect");
 require("dotenv").config();
 const allowAccess = require("./middlewares/allowAccess");
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/api/v1/singleKanji", singleKanji);
 app.use("/api/v1/multipleKanji", multipleKanji);
 app.use("/api/v1/store", store);
+app.use("/api/v1/user", auth);
 
 const port = 3000;
 
