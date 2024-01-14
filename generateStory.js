@@ -11,6 +11,7 @@ const generateKanjiStory = async ({ radical, kanji, type }) => {
   );
   const deploymentId = "GPT35TURBO";
 
+  console.log(radical);
   // Split meaning in to array and add ""
   const formattedRad = radical.split(",").map((word) => `'${word.trim()}'`);
   const formattedKan = kanji.split(",").map((word) => `'${word.trim()}'`);

@@ -4,8 +4,6 @@ const csv = require("csvtojson");
 const path = require("path");
 const csvFilePath = path.resolve("./basic-radical.csv");
 
-console.log(csvFilePath);
-
 router.route("/").get(async (req, res) => {
   try {
     const jsonArray = await csv().fromFile(csvFilePath);

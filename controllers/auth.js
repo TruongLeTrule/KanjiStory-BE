@@ -1,30 +1,19 @@
-const { registerValidator } = require("../validations/auth");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-const register = async (request, response) => {
-  const { error } = registerValidator(request.body);
+const register = async (req, res) => {
+  const { username, password } = req.body;
 
-  if (error) return response.status(422).send(error.details[0].message);
-
-  const checkEmailExist = await User.findOne({ email: request.body.email });
-
-  if (checkEmailExist) return response.status(422).send("Email is exist");
-
-  const salt = await bcrypt.genSalt(10);
-  const hashPassword = await bcrypt.hash(request.body.password, salt);
-
-  const user = new User({
-    name: request.body.name,
-    email: request.body.email,
-    password: hashPassword,
-  });
+  // const salt = await bcrypt.genSalt(10);
+  // const hashPassword = await bcrypt.hash(password, salt);
 
   try {
-    const newUser = await user.save();
-    await response.send(newUser);
+    const user = await User.create({ username, password });
+    res.status(201).json(user);
   } catch (err) {
-    response.status(400).send(err);
+    console.log(err);
+    res.status(400).send({ msg: err });
   }
 };
 
@@ -41,7 +30,10 @@ const login = async (request, response) => {
   if (!checkPassword)
     return response.status(422).send("Email or Password is not correct");
 
-  return response.send(`User ${user.name} has logged in`);
+  const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {
+    expiresIn: 60 * 60 * 24,
+  });
+  response.header("auth-token", token).send(token);
 };
 
 module.exports = { register, login };

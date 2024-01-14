@@ -63,12 +63,8 @@ const regenerateStory = async (req, res) => {
     const { storyType, radical, kanji } = req.body;
 
     // Split meaning in to array
-    const radicalMean = radical.meaning.english
-      .split(",")
-      .map((word) => `'${word.trim()}'`);
-    const kanjiMean = kanji.meaning.english
-      .split(",")
-      .map((word) => `'${word.trim()}'`);
+    const radicalMean = radical.meaning.english;
+    const kanjiMean = kanji.meaning.english;
 
     // Generate story from kanji, radical and type of story
     const story = await generateKanjiStory({
@@ -78,6 +74,7 @@ const regenerateStory = async (req, res) => {
     });
     res.status(200).json({ story });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ msg: error });
   }
 };
