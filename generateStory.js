@@ -41,7 +41,8 @@ const generateStoFroMultiKanji = async ({ kanji, type }) => {
   // Add "" outside each element
   const formattedArr = kanji.map((kanji) => `"${kanji.trim()}"`);
 
-  const message = [
+  // Generate japanese story
+  const storReqMsg = [
     {
       role: "user",
       content: `Generate a ${type} japanese story fewer 100 words and contain ${formattedArr.join(
@@ -49,9 +50,25 @@ const generateStoFroMultiKanji = async ({ kanji, type }) => {
       )} word`,
     },
   ];
-  const result = await client.getChatCompletions(deploymentId, message);
-  const story = result.choices.map((choice) => choice.message.content);
-  return story[0];
+  const storyReq = await client.getChatCompletions(deploymentId, storReqMsg);
+  const story = storyReq.choices.map((choice) => choice.message.content);
+
+  // Generate english translated story
+  const transReqMsg = [
+    {
+      role: "user",
+      content: `Translate this sentence into english '${story}'`,
+    },
+  ];
+  const translateReq = await client.getChatCompletions(
+    deploymentId,
+    transReqMsg
+  );
+  const translate = translateReq.choices.map(
+    (choice) => choice.message.content
+  );
+
+  return { story: story[0], translate: translate[0] };
 };
 
 module.exports = { generateKanjiStory, generateStoFroMultiKanji };

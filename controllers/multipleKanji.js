@@ -8,10 +8,19 @@ const createLongStory = async (req, res) => {
     // Deprecate the duplicated elements
     const cleanKanji = [...new Set(kanji)];
 
-    const story = await generateStoFroMultiKanji({ kanji: cleanKanji, type });
+    const { story, translate } = await generateStoFroMultiKanji({
+      kanji: cleanKanji,
+      type,
+    });
     res
       .status(201)
-      .json({ story, kanji: cleanKanji, storyType: type, date: new Date() });
+      .json({
+        story,
+        translate,
+        kanji: cleanKanji,
+        storyType: type,
+        date: new Date(),
+      });
   } catch (error) {
     res.status(500).json({ msg: error });
   }
