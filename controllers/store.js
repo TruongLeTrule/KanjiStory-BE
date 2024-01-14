@@ -3,7 +3,7 @@ const MultipleKanjiStory = require("../models/multipleKanji");
 
 const getAllSingleKanji = async (req, res) => {
   try {
-    const singleKanjis = await SingleKanji.find({});
+    const singleKanjis = await SingleKanji.find({}).sort({date: -1});
     res.status(200).json({ singleKanjis });
   } catch (error) {
     res.status(500).json({ msg: error });
