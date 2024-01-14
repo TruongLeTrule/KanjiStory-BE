@@ -1,39 +1,60 @@
 const User = require("../models/user");
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
+// Handle validation errors
+const handleErr = (err) => {
+  const errors = { username: "", password: "" };
+
+  // If username already exists
+  if (err.code === 11000) {
+    errors.username = "Username already exists";
+    return errors;
+  }
+
+  if (err.message.includes("User validation failed")) {
+    Object.values(err.errors).forEach(({ properties }) => {
+      errors[properties.path] = properties.message;
+    });
+  }
+
+  if (err.message === "incorrect username") {
+    errors.username = "Username doesn't exist";
+  }
+
+  if (err.message === "incorrect password") {
+    errors.password = "Wrong password";
+  }
+  return errors;
+};
+
+const createToken = (id) => {
+  return jwt.sign({ id }, "roaringleopard_secret");
+};
 
 const register = async (req, res) => {
   const { username, password } = req.body;
 
-  // const salt = await bcrypt.genSalt(10);
-  // const hashPassword = await bcrypt.hash(password, salt);
-
   try {
     const user = await User.create({ username, password });
-    res.status(201).json(user);
+    const token = createToken(user._id);
+    res.status(201).json({ user: user._id, token });
   } catch (err) {
-    console.log(err);
-    res.status(400).send({ msg: err });
+    const errors = handleErr(err);
+    res.status(400).json({ errors });
   }
 };
 
-const login = async (request, response) => {
-  const user = await User.findOne({ email: request.body.email });
-  if (!user)
-    return response.status(422).send("Email or Password is not correct");
+const login = async (req, res) => {
+  const { username, password } = req.body;
 
-  const checkPassword = await bcrypt.compare(
-    request.body.password,
-    user.password
-  );
-
-  if (!checkPassword)
-    return response.status(422).send("Email or Password is not correct");
-
-  const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, {
-    expiresIn: 60 * 60 * 24,
-  });
-  response.header("auth-token", token).send(token);
+  try {
+    const user = await User.login(username, password);
+    const token = createToken(user._id);
+    res.status(201).json({ user: user._id, token });
+  } catch (error) {
+    const errors = handleErr(error);
+    res.status(400).json({ errors });
+  }
 };
 
 module.exports = { register, login };

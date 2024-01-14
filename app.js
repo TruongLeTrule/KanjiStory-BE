@@ -7,10 +7,10 @@ const store = require("./routes/store");
 const auth = require("./routes/auth");
 const connectDB = require("./db/connect");
 require("dotenv").config();
-const allowAccess = require("./middlewares/allowAccess");
+const cors = require("cors");
 
 // middleware
-app.use(allowAccess);
+app.use(cors());
 app.use(express.json());
 
 // routes
